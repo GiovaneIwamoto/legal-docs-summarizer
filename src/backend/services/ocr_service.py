@@ -1,5 +1,8 @@
 import fitz
 import os
+import shutil
+
+from services.format_text_service import format_extracted_text
 
 def extract_text_from_pdf(pdf_path):
     try:
@@ -38,7 +41,7 @@ def process_folder(folder_path, output_folder, log_file):
             with open(caminho_saida, "w", encoding="utf-8") as arquivo_saida:
                 arquivo_saida.write(texto_extraido)
 
-            print(f"Texto extraído do {pdf_path} e salvo em {caminho_saida}")
+            print(f"\nTexto extraído do {pdf_path} e salvo em {caminho_saida}")
         else:
             # Adicionar ao arquivo de log
             log_file.write(
@@ -54,10 +57,15 @@ def process_dataset(dataset_path):
     # Nome do arquivo de log
     log_file_path = os.path.join(dataset_path, "corrompidos.txt")
 
-    # Criar a pasta de saída para os arquivos de texto
-    output_folder_path = os.path.join(dataset_path, "Textos-Extraidos")
-    if not os.path.exists(output_folder_path):
-        os.makedirs(output_folder_path)
+    # Criar a pasta de saída para os arquivos de texto extraídos
+    extracted_output_folder_path = os.path.join(dataset_path, "Textos-Extraidos")
+    if not os.path.exists(extracted_output_folder_path):
+        os.makedirs(extracted_output_folder_path)
+
+    # Criar a pasta de saída para os arquivos de texto formatados
+    formated_output_folder_path = os.path.join(dataset_path, "Textos-Formatados")
+    if not os.path.exists(formated_output_folder_path):
+        os.makedirs(formated_output_folder_path)
 
     # Abrir o arquivo de log para escrever
     with open(log_file_path, "w", encoding="utf-8") as log_file:
@@ -66,7 +74,14 @@ def process_dataset(dataset_path):
             dataset_path) if os.path.isdir(os.path.join(dataset_path, subpasta))]
 
         # Processar cada subpasta
-        for subpasta in subpastas[:-1]:
+        for subpasta in subpastas[:-2]:
             subpasta_path = os.path.join(dataset_path, subpasta)
-            subpasta_output_path = os.path.join(output_folder_path, subpasta)
-            process_folder(subpasta_path, subpasta_output_path, log_file)
+            extracted_subpasta_output_path = os.path.join(extracted_output_folder_path, subpasta)
+            formated_subpasta_output_path = os.path.join(formated_output_folder_path, subpasta)
+            
+            # Extrair texto e formatar para cada subpasta
+            process_folder(subpasta_path, extracted_subpasta_output_path, log_file)
+            format_extracted_text(extracted_subpasta_output_path, formated_subpasta_output_path)
+            
+            # Remover a subpasta após o processamento
+            shutil.rmtree(subpasta_path) 

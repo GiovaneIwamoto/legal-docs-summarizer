@@ -20,7 +20,7 @@ async def upload_file(file: UploadFile = File(...)):
     # Definir o caminho e criar a pasta uploads
     zip_path = os.path.join(UPLOAD_FOLDER, file.filename)
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    print("Caminho do arquivo ZIP:", zip_path)
+    print("\nCaminho do arquivo ZIP:", zip_path)
 
     # Salvar o arquivo ZIP
     save_upload_file(file, zip_path)
