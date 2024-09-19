@@ -9,7 +9,7 @@ load_dotenv()
 
 # Configura o cliente Bedrock com as credenciais carregadas
 bedrock = boto3.client(
-    'bedrock-runtime',
+    'bedrock',
     'us-east-1',
     endpoint_url='https://bedrock-runtime.us-east-1.amazonaws.com',
     aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),

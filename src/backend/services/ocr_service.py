@@ -63,9 +63,9 @@ def process_dataset(dataset_path):
         os.makedirs(extracted_output_folder_path)
 
     # Criar a pasta de saída para os arquivos de texto formatados
-    formated_output_folder_path = os.path.join(dataset_path, "Textos-Formatados")
-    if not os.path.exists(formated_output_folder_path):
-        os.makedirs(formated_output_folder_path)
+    formatted_output_folder_path = os.path.join(dataset_path, "Textos-Formatados")
+    if not os.path.exists(formatted_output_folder_path):
+        os.makedirs(formatted_output_folder_path)
 
     # Abrir o arquivo de log para escrever
     with open(log_file_path, "w", encoding="utf-8") as log_file:
@@ -74,14 +74,14 @@ def process_dataset(dataset_path):
             dataset_path) if os.path.isdir(os.path.join(dataset_path, subpasta))]
 
         # Processar cada subpasta
-        for subpasta in subpastas[:-2]:
+        for subpasta in subpastas[:-2]: # Alterar aqui dependendo da quantidade de subpastas
             subpasta_path = os.path.join(dataset_path, subpasta)
             extracted_subpasta_output_path = os.path.join(extracted_output_folder_path, subpasta)
-            formated_subpasta_output_path = os.path.join(formated_output_folder_path, subpasta)
+            formatted_subpasta_output_path = os.path.join(formatted_output_folder_path, subpasta)
             
             # Extrair texto e formatar para cada subpasta
             process_folder(subpasta_path, extracted_subpasta_output_path, log_file)
-            format_extracted_text(extracted_subpasta_output_path, formated_subpasta_output_path)
+            format_extracted_text(extracted_subpasta_output_path, formatted_subpasta_output_path)
             
             # Remover a subpasta após o processamento
             shutil.rmtree(subpasta_path) 
