@@ -1,0 +1,175 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #002F4D;
+  color: #fff;
+  padding: 16px;
+  margin: 0 0 80px 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  padding: 24px;
+}
+main .header-preform {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  width: 43%;
+  margin: 0 0 80px 0;
+  font-size: 18px;
+  line-height: 25.2px;
+}
+main form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 75%;
+}
+main form .row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+main form .row .item {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  font-weight: 700;
+}
+main form .row .item p {
+  margin: 0 0 16px 0;
+}
+main form .row .item .input {
+  display: flex;
+  flex-direction: row;
+}
+main form .row .item .select {
+  display: flex;
+  align-items: center;
+  outline: 1px solid #cccccc;
+  border-radius: 8px;
+  position: relative;
+  width: 400px;
+}
+main form .row .item .select select {
+  width: 100%;
+  border: none;
+  appearance: none;
+  outline: none;
+  height: 100%;
+  padding: 16px;
+  font-size: 18px;
+  background-color: transparent;
+}
+main form .row .item .select img {
+  width: 13%;
+  padding: 16px;
+  position: absolute;
+  right: 0;
+}
+main form .row .item .text {
+  border-radius: 8px;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  justify-content: space-around;
+  align-content: center;
+  outline: solid 0.8px #979292;
+  width: 400px;
+}
+main form .row .item .text input {
+  width: 90%;
+  height: 100%;
+  padding: 16px;
+  font-size: 18px;
+  border: none;
+  outline: none;
+}
+main form .row .item .text img {
+  width: 13%;
+  padding: 16px;
+}
+main form .row .item .file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  outline: 1px solid #cccccc;
+  border-radius: 8px;
+  width: 100%;
+  padding: 8px 16px;
+  width: 400px;
+}
+main form .row .item .file p {
+  font-weight: 400;
+  margin: 0 !important;
+}
+main form .row .item .file label.label input[type=file] {
+  position: absolute;
+  top: -1000px;
+}
+main form .row .item .file .label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: #EFEFEF;
+}
+main form .row .item .file .label #fileName {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #979292;
+  text-overflow: ellipsis;
+}
+main form .row .item .file .label #fileName img {
+  margin: 0 8px 0 0;
+}
+main form .row .input-align-left {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+
+button {
+  border: none;
+  width: 290px;
+  border-radius: 8px;
+  background-color: #006EAB;
+  color: #fff;
+  padding: 16px;
+  font-size: 18px;
+}
+
+footer {
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  padding: 8px;
+  background-color: #1A1A1A;
+  color: #fff;
+  text-align: center;
+}
+
+/*# sourceMappingURL=index.css.map */
