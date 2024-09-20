@@ -1,5 +1,5 @@
 import os
-from services.bedrock_service import get_completion
+from services.bedrock_service import process_obj
 
 def process_summary(input_folder, output_folder):
     # Listar todas as subpastas de Textos-Formatados
@@ -23,12 +23,9 @@ def process_summary(input_folder, output_folder):
                 with open(input_file_path, "r", encoding="utf-8") as file:
                     text_content = file.read()
 
-                # Gerar o prompt para o Bedrock
-                prompt = f"Por favor, forneça um resumo para o seguinte texto:\n\n{text_content}\n\nResumo:"
-
-                # Chamar o modelo Bedrock para gerar o resumo
-                try:
-                    summary = get_completion(prompt)
+                # Chamar o service de Bedrock para gerar o resumo
+                try:                    
+                    summary = process_obj(text_content)
                     
                     # Salvar o resumo no arquivo de saída
                     with open(output_file_path, "w", encoding="utf-8") as output_file:

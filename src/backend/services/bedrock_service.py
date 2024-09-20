@@ -18,11 +18,11 @@ bedrock = boto3.client(
 )
 
 # Cria um corpo de requisição em formato JSON com parâmetros para a solicitação Bedrock
-def get_completion(prompt, max_tokens_to_sample=1000):
+def get_completion(prompt, max_tokens_to_sample=1800):
     body = json.dumps({
         "prompt": prompt,
         "max_tokens_to_sample": max_tokens_to_sample,
-        "temperature": 1,
+        "temperature": 0,
         "top_k": 1,
         "top_p": 0.001,
         "stop_sequences": ["\nHuman:"],
@@ -44,15 +44,28 @@ def get_completion(prompt, max_tokens_to_sample=1000):
     return completion
 
 # Defina a função do prompt, onde passa também o contexto.
-def process_obj(obj):
-    prompt = f"""
-Human: Pegue os dados do arquivo {obj}.
-# Defina aqui o seu prompt #
-"
-Assistant:
-"""
+def process_obj(text_content):
+
+    # Aspectos importantes que devem ser considerados no resumo
+    key_aspects = f"""
+    1. Está sendo julgado um recurso extraordinário ou agravo?
+    2. Qual órgão julgador proferiu o acórdão recorrido?
+    3. Houve reforma ou confirmação de decisão anterior?
+    4. O acórdão recorrido foi proferido por unanimidade de votos ou por maioria?
+    5. Quais são os fundamentos apresentados pelo relator?
+    6. Qual é a transcrição literal da ementa?
+    7. Qual foi o juízo de admissibilidade do recurso extraordinário (admissão ou inadmissão) e quais os seus fundamentos (matéria infraconstitucional, súmula 279 etc.)?
+    8. O recurso extraordinário foi interposto com fundamento em qual dispositivo constitucional (art. 102, III, a, b, c ou d, da CF)?
+    9. Quais os dispositivos indicados como violados e quais os argumentos relevantes do recurso?
+    10. Quais os pedidos formulados no recurso?
+    11. Há contrarrazões e quais são os argumentos relevantes do recurso?"""
+    
+    prompt = f"\n\nHuman: Considerando os conceitos chave abaixo: \n<conceitos_chave>{key_aspects}\n</conceitos_chave>\n\nFaça um resumo do texto abaixo dando atenção em manter os conceitos chave apresentados anteriormente, apenas se mencionados: \n<text>\n{text_content}</text>\nO resumo deve ser gerado apenas em formato de texto paragrafado e apresentado direto ao ponto sem introduções.\n\nAssistant:"
+
+    print(f"\nprompt: {prompt}")
+
     response = get_completion(prompt, 6000)
-    return response
+    return response 
 
 # Função que processa o arquivo de entrada e escreve o resultado no arquivo de saída
 def process_and_write_output(input_file, output_file):
