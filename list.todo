@@ -1,0 +1,2 @@
+    Fix bug: Quando envia duas requisições acaba apagando a pasta de arquivos extraídos
+    FeatL: Bedrock max tokens params
