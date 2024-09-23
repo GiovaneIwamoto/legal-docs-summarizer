@@ -70,11 +70,13 @@ def process_dataset(dataset_path):
     # Abrir o arquivo de log para escrever
     with open(log_file_path, "w", encoding="utf-8") as log_file:
         # Listar todas as pastas dentro de "dataset"
-        subpastas = [subpasta for subpasta in os.listdir(
-            dataset_path) if os.path.isdir(os.path.join(dataset_path, subpasta))]
+        subpastas = [subpasta for subpasta in os.listdir(dataset_path)
+             if os.path.isdir(os.path.join(dataset_path, subpasta)) 
+             and subpasta not in ["Textos-Extraidos", "Textos-Formatados","Textos-Resumidos"]]
+
 
         # Processar cada subpasta
-        for subpasta in subpastas[:-2]: # Alterar aqui dependendo da quantidade de subpastas
+        for subpasta in subpastas: # Alterar aqui dependendo da quantidade de subpastas
             subpasta_path = os.path.join(dataset_path, subpasta)
             extracted_subpasta_output_path = os.path.join(extracted_output_folder_path, subpasta)
             formatted_subpasta_output_path = os.path.join(formatted_output_folder_path, subpasta)

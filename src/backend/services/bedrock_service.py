@@ -30,7 +30,9 @@ def get_completion(prompt, max_tokens_to_sample=1800):
     })
 
     # Define informações necessárias para a chamada ao modelo Bedrock
+    #modelId = 'anthropic.claude-v2'
     modelId = 'anthropic.claude-instant-v1'
+    
     accept = 'application/json'
     contentType = 'application/json'
 
