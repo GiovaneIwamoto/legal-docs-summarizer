@@ -1,7 +1,7 @@
 import os
 from services.bedrock_service import process_obj
 
-def process_summary(input_folder, output_folder):
+def process_summary_individual(input_folder, output_folder):
     # Listar todas as subpastas de Textos-Formatados
     subpastas = [subpasta for subpasta in os.listdir(input_folder) if os.path.isdir(os.path.join(input_folder, subpasta))]
 
@@ -34,3 +34,38 @@ def process_summary(input_folder, output_folder):
                     print(f"\nResumo gerado para {filename} e salvo em {output_file_path}")
                 except Exception as e:
                     print(f"\nErro ao gerar resumo para {filename}: {e}")
+
+# FIXME: print de path ouput_file
+# TODO: arrumar parte do bedrock, personalizar prompt 
+
+def process_summary_final(input_folder, output_file):
+    # Listar todas as subpastas de Textos-Resumidos
+    subpastas = [subpasta for subpasta in os.listdir(input_folder) if os.path.isdir(os.path.join(input_folder, subpasta))]
+        
+    text_content = ""  
+    
+    for subpasta in subpastas:
+        input_subpasta_path = os.path.join(input_folder, subpasta)
+    
+        for filename in os.listdir(input_subpasta_path):
+            if filename.endswith(".txt"):
+                input_file_path = os.path.join(input_subpasta_path, filename)
+                
+                # Ler o conteúdo do arquivo de texto resumido
+                with open(input_file_path, "r", encoding="utf-8") as file:                    
+                    
+                    # Concatena o conteúdo de todos os arquivos resumidos
+                    text_content += file.read() + "\n\n"
+                    
+    # Chamar o service de Bedrock para gerar o resumo final
+    try:              
+        print(f"CONTEXTO FINAL: {text_content}")      
+        summary = process_obj(text_content)
+                    
+        # Salvar o resumo no arquivo de saída
+        with open(output_file, "w", encoding="utf-8") as output_file:
+            output_file.write(summary)
+
+        print(f"\nResumo final gerado e salvo em {output_file}")
+    except Exception as e:
+        print(f"\nErro ao gerar resumo final: {e}")

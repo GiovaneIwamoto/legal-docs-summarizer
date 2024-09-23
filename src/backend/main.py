@@ -1,13 +1,23 @@
 import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from services.ocr_service import process_dataset
-from services.process_summary_service import process_summary
+from services.process_summary_service import process_summary_individual, process_summary_final
 from utils.save_extract_zip_file import save_extract_zip_file
 
 UPLOAD_FOLDER = "uploads"
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ou use ["*"] para permitir todas as origens
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos os cabeçalhos
+)
 
 @app.post("/generate_summary/")
 async def generate_summary(file: UploadFile = File(...)):
@@ -26,6 +36,10 @@ async def generate_summary(file: UploadFile = File(...)):
     os.makedirs(summarized_folder, exist_ok=True)
 
     # Processar os textos formatados e gerar os resumos individuais
-    process_summary(formatted_folder, summarized_folder)
-
+    process_summary_individual(formatted_folder, summarized_folder)
+    
+    # Processar os resumos individuais e gerar o resumo final
+    final_summary_path = os.path.join(summarized_folder, "resumo_final.txt")
+    process_summary_final(summarized_folder, final_summary_path)
+    
     return {"detail": "Upload e processamento concluídos com sucesso!"}
