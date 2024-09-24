@@ -25,7 +25,7 @@ def process_summary_individual(input_folder, output_folder):
 
                 # Chamar o service de Bedrock para gerar o resumo
                 try:                    
-                    summary = process_obj(text_content)
+                    summary = process_obj(text_content, type_summary="individual")
                     
                     # Salvar o resumo no arquivo de saída
                     with open(output_file_path, "w", encoding="utf-8") as output_file:
@@ -58,7 +58,7 @@ def process_summary_final(input_folder, output_file):
     # Chamar o service de Bedrock para gerar o resumo final
     try:              
         print(f"\nContexto Final: \n\n{text_content}")      
-        summary = process_obj(text_content)
+        summary = process_obj(text_content, type_summary="final")
                     
         output_file_path = os.path.join(output_file)    
         
