@@ -35,13 +35,11 @@ def process_summary_individual(input_folder, output_folder):
                 except Exception as e:
                     print(f"\nErro ao gerar resumo para {filename}: {e}")
 
-# FIXME: print de path ouput_file
-# TODO: arrumar parte do bedrock, personalizar prompt 
-
 def process_summary_final(input_folder, output_file):
     # Listar todas as subpastas de Textos-Resumidos
     subpastas = [subpasta for subpasta in os.listdir(input_folder) if os.path.isdir(os.path.join(input_folder, subpasta))]
-        
+    
+    # Text content variável para armazenar o conteúdo de todos os arquivos resumidos
     text_content = ""  
     
     for subpasta in subpastas:
@@ -59,13 +57,15 @@ def process_summary_final(input_folder, output_file):
                     
     # Chamar o service de Bedrock para gerar o resumo final
     try:              
-        print(f"CONTEXTO FINAL: {text_content}")      
+        print(f"\nContexto Final: \n\n{text_content}")      
         summary = process_obj(text_content)
                     
+        output_file_path = os.path.join(output_file)    
+        
         # Salvar o resumo no arquivo de saída
-        with open(output_file, "w", encoding="utf-8") as output_file:
+        with open(output_file_path, "w", encoding="utf-8") as output_file:
             output_file.write(summary)
-
-        print(f"\nResumo final gerado e salvo em {output_file}")
+        
+        print(f"Resumo final gerado e salvo em {output_file_path}\n")
     except Exception as e:
-        print(f"\nErro ao gerar resumo final: {e}")
+        print(f"\nErro ao gerar resumo final: {e}\n")

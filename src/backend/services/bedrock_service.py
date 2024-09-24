@@ -30,8 +30,8 @@ def get_completion(prompt, max_tokens_to_sample=1800):
     })
 
     # Define informações necessárias para a chamada ao modelo Bedrock
-    #modelId = 'anthropic.claude-v2'
-    modelId = 'anthropic.claude-instant-v1'
+    modelId = 'anthropic.claude-v2'
+    #modelId = 'anthropic.claude-instant-v1'
     
     accept = 'application/json'
     contentType = 'application/json'
@@ -64,7 +64,7 @@ def process_obj(text_content):
     
     prompt = f"\n\nHuman: Considerando os conceitos chave abaixo: \n<conceitos_chave>{key_aspects}\n</conceitos_chave>\n\nFaça um resumo do texto abaixo dando atenção em manter os conceitos chave apresentados anteriormente, apenas se mencionados: \n<text>\n{text_content}</text>\nO resumo deve ser gerado apenas em formato de texto paragrafado e apresentado direto ao ponto sem introduções.\n\nAssistant:"
 
-    print(f"\nprompt: {prompt}")
+    # print(f"\nprompt: {prompt}")
 
     response = get_completion(prompt, 6000)
     return response 
