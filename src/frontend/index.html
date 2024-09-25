@@ -29,35 +29,40 @@
         />
         <span>Saiba como usar</span>
         <div id="tutorial-tooltip">
-          <b> Selecionar de documentos:</b>
+          <b> Selecionar documentos:</b>
           <ol>
             <li>
-              Você pode selecionar um documento através de “selecionar
-              documento”. Essa opção permite que você escolha um documento PDF
+              Você pode selecionar uma pasta do seu computador através do botão de anexar arquivo. Essa opção permite que você escolha uma pasta no formato .zip
               para realizar a extração das informações;
             </li>
             <li>
-              Após a escolha do documento PDF que deseja abrir, é preciso clicar
-              no botão “extrair informações”;
+              Após a escolha do da pasta .zip que deseja abrir, é preciso clicar
+              no botão “Extrair informações”;
             </li>
             <li>
-              As informações relativas ao arquivo selecionado aparecerão
-              sumarizadas abaixo dos campos de seleção e anexo.
+              As informações relativas à pasta selecionada aparecerão
+              sumarizadas abaixo dos campos de seleção e anexo;
             </li>
           </ol>
-          <b>Anexar arquivo do seu computador:</b>
+            <br />
+            <b>Estrutura de diretório da pasta a ser enviada:</b>
           <ol>
             <li>
-              Você pode selecionar um documento em seu computador e anexar na
-              ferramenta;
+              A ferramenta analisa arquivos PDFs que estão dentro de subpastas da pasta principal;
             </li>
             <li>
-              Após a escolha do documento PDF, é preciso clicar no botão
-              “Extrair Informações”;
-            </li>
-            <li>
-              As informações relativas ao arquivo selecionado aparecerão
-              sumarizadas abaixo dos campos de seleção e anexo.
+                Portanto a estrutura de diretório deve ser:
+                <pre>
+                <code>
+                  pasta-principal.zip/
+                  |── subpasta1/
+                  │    |── arquivo1.pdf
+                  │    |── arquivo2.pdf
+                  |── subpasta2/
+                  │    |── arquivo3.pdf
+                  │    |── arquivo4.pdf
+                </code>
+                </pre>
             </li>
           </ol>
         </div>
@@ -67,26 +72,11 @@
       <div class="header-preform" aria-label="Cabeçalho antes do formulário">
         <h3>Resumos de Documentos Jurídicos</h3>
         <p>
-          Esta ferramenta de IA Generativa integra OCR para a extração de texto de documentos PDF e utiliza AWS Bedrock para realizar sumarização. A técnica de Prompt Engineering é aplicada para orientar a geração de resumos que abordam aspectos críticos do conteúdo jurídico.
+          Esta ferramenta de IA Generativa integra OCR para a extração de texto de documentos PDF e utiliza AWS Bedrock para realizar sumarização. Utiliza de Prompt Engineering para orientar a geração de resumos que abordam aspectos críticos do conteúdo jurídico.
         </p>
       </div>
       <form>
         <div class="row space-between"> 
-          <div class="item">
-            <p>Escolher um documento ou uma pasta para gerar o resumo:</p>
-            <div class="input-text">
-              <input
-                type="text"
-                alt="Digitar número do processo"
-                id="numero-processo"
-                placeholder="Digitar número do processo"
-              />
-              <img
-                src="assets/img/search.svg"
-                alt="Imagem de uma lupa para pesquisar"
-              />  
-            </div>
-          </div>
           <div class="item">
             <p>Anexar arquivo do seu computador</p>
             <div class="input-file">
