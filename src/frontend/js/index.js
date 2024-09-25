@@ -1,130 +1,66 @@
 document.getElementById("attach-file").onchange = function (event) {
-  const fileName = event.target.files[0].name.split(".")[0];
+  const fileName = event.target.files[0].name;
   const file = event.target.files[0];
 
-  const pdfIcon = document.createElement("img");
-  pdfIcon.src = "assets/img/pdf-icon.svg";
-  pdfIcon.alt = "Imagem de um arquivo PDF";
+  if (!fileName.endsWith(".zip")) {
+    alert("O arquivo deve ser no formato ZIP.");
+    return;
+  }
 
-  var image = document.getElementById("icon-file-attach");
-  console.log(image);
-  image.setAttribute("src", "assets/img/pdf-icon.svg");
+  //const pdfIcon = document.createElement("img");
+  //pdfIcon.src = "assets/img/zip-icon.svg"; // Altere para um ícone de ZIP
+  //pdfIcon.alt = "Imagem de um arquivo ZIP";
+
+  // var image = document.getElementById("icon-file-attach");
+  //image.setAttribute("src", "assets/img/zip-icon.svg");
   document.getElementById("label-file-attach").innerHTML = fileName;
-
-  lerArquivo(file)
-    .then((base64Data) => {
-      // Aqui você pode usar a variável base64Data como desejar
-      base64 = base64Data;
-      console.log("dentro do async:", base64Data);
-      // Por exemplo, você pode enviar isso para um endpoint ou armazenar em uma variável externa
-      // Faz alguma ação com base64Data
-    })
-    .catch((error) => {
-      console.error("Erro:", error);
-    });
 };
 
 let base64 = null;
 
 document.getElementById("extract").onclick = function (event) {
-  const selectElement = document.getElementById("select").value;
+  const fileInput = document.getElementById("attach-file");
+  const file = fileInput.files[0];
 
-  let isSuccess = selectElement !== "0" ? true : false;
-
-  const numeroProcesso = document.getElementById("numero-processo").value;
-
-  if (base64 !== null && isSuccess) {
-    document.getElementById("chat-loader").style.display = "flex";
-    window.scrollTo(0, 500);
-
-    fazerRequisicao_doc(base64, selectElement)
-      .then((uuid) => {
-        console.log(uuid);
-        localStorage.setItem("UUID", uuid);
-        verificarEndpoint(uuid)
-          .then((body) => {
-            console.log("Body da requisição bem-sucedida:", body);
-            const resultadoElement = document.getElementById("message-txt");
-            document.getElementById("chat-loader").style.display = "none";
-            document.getElementById("chat-wrapper").style.display = "block";
-            document.getElementById("ask-assistent-form").style.display =
-              "block";
-            window.scrollTo(0, 1000);
-            document.getElementsByTagName("footer")[0].style.position =
-              "relative";
-            resultadoElement.innerHTML = body.replace(/\n/g, "<br>");
-          })
-          .catch((error) => {
-            console.error("Erro ao verificar a requisição:", error);
-            // Trate os erros aqui, se necessário
-          });
-      })
-      .catch((error) => {
-        console.error("Erro na obtenção do UUID:", error);
-        // Trate os erros aqui, se necessário
-      });
+  if (!file) {
+    alert("Nenhum arquivo selecionado!");
+    return;
   }
 
-  let terminaComPDF = numeroProcesso.endsWith(".pdf") ? true : false;
+  const formData = new FormData();
+  formData.append("file", file); // Adiciona o arquivo ZIP ao FormData
 
-  if (selectElement && !terminaComPDF) {
-    isSuccess = true;
-  }
+  document.getElementById("chat-loader").style.display = "flex";
+  window.scrollTo(0, 500);
 
-  if (numeroProcesso.trim() !== "" && isSuccess) {
-    document.getElementById("chat-loader").style.display = "flex";
-    window.scrollTo(0, 500);
+  fetch("http://127.0.0.1:8000/generate_summary/", {
+    // Adicionado "http://"
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao processar o arquivo");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      document.getElementById("chat-loader").style.display = "none";
+      document.getElementById("chat-wrapper").style.display = "block";
+      document.getElementById("ask-assistent-form").style.display = "block";
+      window.scrollTo(0, 1000);
 
-    fazerRequisicao_texto(numeroProcesso, selectElement)
-      .then((uuid) => {
-        console.log(uuid);
-        localStorage.setItem("UUID", uuid);
-        if (uuid !== null) {
-          verificarEndpoint(uuid)
-            .then((body) => {
-              console.log("Body da requisição bem-sucedida:", body);
-              const resultadoElement = document.getElementById("message-txt");
-              /*resultadoElement.innerHTML = addBreakBeforePhrase(
-                formatTextWithHTML(body)
-              );*/
-              resultadoElement.innerHTML = body.replace(/\n/g, "<br>");
-
-              document.getElementById("chat-loader").style.display = "none";
-              document.getElementById("chat-wrapper").style.display = "block";
-              document.getElementById("ask-assistent-form").style.display =
-                "block";
-              window.scrollTo(0, 1000);
-              document.getElementsByTagName("footer")[0].style.position =
-                "relative";
-            })
-            .catch((error) => {
-              console.error("Erro ao verificar a requisição:", error);
-              // Trate os erros aqui, se necessário
-            });
-        } else {
-          document.getElementById("chat-loader").style.display = "none";
-          document.getElementById("chat-wrapper").style.display = "block";
-          const resultadoElement = document.getElementById("message-txt");
-          resultadoElement.innerHTML = addBreakBeforePhrase(
-            "Documento não encontrado"
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Erro na obtenção do UUID:", error);
-        // Trate os erros aqui, se necessário
-      });
-  }
-  // Faça a resquest aqui
-  // Troque o setTimeout para o retorno da request
-
-  /* setTimeout(() => {
-    document.getElementById('chat-loader').style.display = 'none'
-    document.getElementById('chat-wrapper').style.display = 'block'
-    document.getElementById('ask-assistent-form').style.display = 'block'
-    window.scrollTo(0, 1000);
-    document.getElementsByTagName('footer')[0].style.position = 'relative';
-  }, 1000);*/
+      if (data.final_summary) {
+        const resultadoElement = document.getElementById("message-txt");
+        resultadoElement.innerHTML = data.final_summary.replace(/\n/g, "<br>");
+      } else {
+        alert("Erro ao processar o arquivo.");
+      }
+    })
+    .catch((error) => {
+      document.getElementById("chat-loader").style.display = "none";
+      console.error("Erro ao enviar o arquivo:", error);
+    });
 };
 
 document.getElementById("ask-assistent-submit").onclick = function (event) {
@@ -219,8 +155,7 @@ function CopyToClipboard(containerid) {
 //minhas funcs
 
 function fazerRequisicao_rag(ask, uuid) {
-  const url =
-    "COLOQUE AQUI O LINK ";
+  const url = "COLOQUE AQUI O LINK ";
 
   const payload = {
     prompt: ask,
@@ -264,8 +199,7 @@ function separarPerguntas(textoBruto) {
 }
 
 function fazerRequisicao_doc(base64, id) {
-  const url =
-    "";
+  const url = "";
 
   const payload = {
     base64: base64,
@@ -297,8 +231,7 @@ function fazerRequisicao_doc(base64, id) {
 }
 
 function fazerRequisicao_texto(numeroProcesso, id) {
-  const url =
-    "";
+  const url = "";
 
   const payload = {
     doc: numeroProcesso,
@@ -331,8 +264,7 @@ function fazerRequisicao_texto(numeroProcesso, id) {
 
 async function verificarEndpoint(uuid) {
   return new Promise((resolve, reject) => {
-    const url =
-      "";
+    const url = "";
 
     const payload = {
       uuid: uuid,

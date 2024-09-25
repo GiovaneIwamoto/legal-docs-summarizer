@@ -1,172 +1,147 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xml:lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STF</title>
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Open+Sans:wght@400;700&family=Roboto&family=Ubuntu&display=swap"
-    rel="stylesheet">
-  <!-- Fonts -->
-  <link rel="stylesheet" href="css/index.css" />
-</head>
-
-<body>
-  <header>
-    <div class="brand">
-      <img src="assets/img/logo.svg" alt="Logo do STF">
-    </div>
-    <h1>Análise de processos STF</h1>
-  </header>
-
-  <div class="tutorial-wrapper">
-    <div id="tutorial">
-      <img src="assets/img/tutorial.svg" alt="Imagem de um ponto de interrogação">
-      <span>Saiba como usar</span>
-      
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STF</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Open+Sans:wght@400;700&family=Roboto&family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img src="assets/img/logo.svg" alt="Logo do STF" />
+      </div>
+      <h1>Resumos de processos STF</h1>
+    </header>
+    <div class="tutorial-wrapper">
+      <div id="tutorial">
+        <img  
+          src="assets/img/tutorial.svg"
+          alt="Imagem de um ponto de interrogação"
+        />
+        <span>Saiba como usar</span>
         <div id="tutorial-tooltip">
           <b> Selecionar de documentos:</b>
           <ol>
-            <li>Você pode selecionar um documento através de “selecionar documento”. Essa opção permite que você escolha um documento PDF para realizar a extração das informações;</li>
-            <li>Após a escolha do documento PDF que deseja abrir, é preciso clicar no botão “extrair informações”;</li>
-            <li>As informações relativas ao arquivo selecionado aparecerão sumarizadas abaixo dos campos de seleção e anexo.</li>
+            <li>
+              Você pode selecionar um documento através de “selecionar
+              documento”. Essa opção permite que você escolha um documento PDF
+              para realizar a extração das informações;
+            </li>
+            <li>
+              Após a escolha do documento PDF que deseja abrir, é preciso clicar
+              no botão “extrair informações”;
+            </li>
+            <li>
+              As informações relativas ao arquivo selecionado aparecerão
+              sumarizadas abaixo dos campos de seleção e anexo.
+            </li>
           </ol>
-      
           <b>Anexar arquivo do seu computador:</b>
           <ol>
-            <li>Você pode selecionar um documento em seu computador e anexar na ferramenta;</li>
-            <li>Após a escolha do documento PDF, é preciso clicar no botão “Extrair Informações”;</li>
-            <li>As informações relativas ao arquivo selecionado aparecerão sumarizadas abaixo dos campos de seleção e anexo.</li>
+            <li>
+              Você pode selecionar um documento em seu computador e anexar na
+              ferramenta;
+            </li>
+            <li>
+              Após a escolha do documento PDF, é preciso clicar no botão
+              “Extrair Informações”;
+            </li>
+            <li>
+              As informações relativas ao arquivo selecionado aparecerão
+              sumarizadas abaixo dos campos de seleção e anexo.
+            </li>
           </ol>
         </div>
+      </div>
     </div>
-
-  </div>
-
-  <main>
-    <div class="header-preform" aria-label="Cabeçalho antes do formulário">
-      <h3>Análise de Processos Recursais</h3>
-      <p>Essa ferramenta utiliza Generative AI na leitura e processamento das peças jurídicas para extração de e sumarização de informações de cada processo recursal.</p>
-    </div>
-    <form>
-      <div class="row space-between ">
-        <div class="item">
-          <p>Selecionar tipo de documento</p>
-          <div class="input-select">
-            <select id="select">
-              <option value="0" selected>Selecionar tipo de documento</option>
-              <option value="1">Acórdão recorrido</option>
-              <option value="2">Acórdão de embargos</option>
-              <option value="3">Agravo</option>
-              <option value="4">Decisão de admissibilidade</option>
-              <option value="5">Recurso extraordinário</option>
-            </select>
-            <img src="assets/img/caret.svg" alt="Imagem de uma lupa para pesquisar">
+    <main>
+      <div class="header-preform" aria-label="Cabeçalho antes do formulário">
+        <h3>Resumos de Documentos Jurídicos</h3>
+        <p>
+          Esta ferramenta de IA Generativa integra OCR para a extração de texto de documentos PDF e utiliza AWS Bedrock para realizar sumarização. A técnica de Prompt Engineering é aplicada para orientar a geração de resumos que abordam aspectos críticos do conteúdo jurídico.
+        </p>
+      </div>
+      <form>
+        <div class="row space-between"> 
+          <div class="item">
+            <p>Escolher um documento ou uma pasta para gerar o resumo:</p>
+            <div class="input-text">
+              <input
+                type="text"
+                alt="Digitar número do processo"
+                id="numero-processo"
+                placeholder="Digitar número do processo"
+              />
+              <img
+                src="assets/img/search.svg"
+                alt="Imagem de uma lupa para pesquisar"
+              />  
+            </div>
           </div>
-        </div>
-
-        <div class="item">
-          <p>Escolher um documento ou uma pasta para gerar o resumo:</p>
-          <div class="input-text">
-            <input type="text" alt="Digitar número do processo" id="numero-processo" placeholder="Digitar número do processo">
-            <img src="assets/img/search.svg" alt="Imagem de uma lupa para pesquisar">
-          </div>
-        </div>
-
-        <div class="item">
-          <p>Anexar arquivo do seu computador</p>
-          <div class="input-file">
-            <p id="doc-text">Doc</p>
-            <label class="label">
-              <input type="file" accept="application/pdf" id="attach-file" required />
-              <span id="fileName">
-                <img id="icon-file-attach" src="assets/img/folder.svg" alt="Imagem de uma pasta azul que indica">
-                <span id="label-file-attach">
-                  Anexar arquivo PDF
+          <div class="item">
+            <p>Anexar arquivo do seu computador</p>
+            <div class="input-file">
+              <p id="doc-text">Doc</p>
+              <label class="label">
+                <input type="file" accept=".zip" id="attach-file" required />
+                <span id="fileName">
+                  <img
+                    id="icon-file-attach"
+                    src="assets/img/folder.svg"
+                    alt="Imagem de uma pasta azul"
+                  />
+                  <span id="label-file-attach"> Anexar arquivo ZIP </span>
                 </span>
-              </span>
-            </label>
+              </label>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="item-align-left">
-          <p>&nbsp;</p>
-          <button id="extract" type="button">
-            Extrair informações
-          </button>
         </div>
-      </div>
-      <div class="row">
-        <div id="chat-loader">
-          <img src="assets/img/logo-loader.svg" alt="Logo do STF">
-          Extraindo dados...
+        <div class="row">
+          <div class="item-align-left">
+            <p>&nbsp;</p>
+            <button id="extract" type="button">Extrair informações</button>
+          </div>
         </div>
-        <div id="chat-wrapper">
-          <h3>Resultados obtidos</h3>
-          
-          <div id="chat">
-            <div class="message-box">
-              <div id="sender">
-                <span id="identifier">Assistente STF</span>
-                <span id="copy" style="cursor: pointer;">Copiar</span>
-              </div>
-              <div class="message" id ="message-txt">
-                Recurso julgado: Agravo
-                Órgão julgador que proferiu o acórdão recorrido: ATribunal Regional Federal da 1ª Região
-                Reforma ou confirmação de decisão anterior: Reforma
-                O acórdão recorrido foi proferido por unanimidade de votos ou por maioria: Não informado
-                Fundamentos apresentados pelo relator: A decisão recorrida desconsiderou decisão proferida pelo STF que
-                reconheceu a constitucionalidade da Lei 7.689/88, violando os artigos 5º, inciso XXXVI.
-                Transcrição literal da ementa: “TRIBUTÁRIO - MANDADO DE SEGURANÇA - CSLL - INCONSTITUCIONALIDADE LEI N.
-                7.689/88 - COISA JULGADA: EFEITOS OBJETIVOS - JURISPRUDÊNCIA STJ (RESP 1.118.893/)
-                Juízo de admissibilidade do recurso extraordinário: Inadmissão por matéria infraconstitucional
-                Fundamentos: Inadmissão por matéria infraconstitucional
-                Dispositivo constitucional fundamentado: Artigo 102, III, a da Constituição Federal
-                Dispositivos indicados como violados e quais os argumentos relevantes do recurso: Artigos 5º, incisivo XXXVI a
-                102 da CF. A decisão do STF alterou o quadro jurídico, fazendo cessar os efeitos da coisa julgada.
-                Pedidos formulados no recurso: Provimento do recurso extraordinário para reformar o acórdão recorrido.
-                Contrarrazões e argumentos relevantes do recurso: Sim, com argumentos de que a controvérsia envolve matéria
-                constitucional.
+        <div class="row">
+          <div id="chat-loader">
+            <img src="assets/img/logo-loader.svg" alt="Logo do STF" />
+            Extraindo dados...
+          </div>
+          <div id="chat-wrapper">
+            <h3></h3>
+            <div id="chat">
+              <div class="message-box">
+                <div id="sender">
+                  <span id="identifier">Resumo do documento</span>
+                </div>
+                <div class="message" id="message-txt">
+                  Mensagem onde será exibido o resumo do documento
+                </div>
               </div>
             </div>
-
           </div>
         </div>
-      </div>
-    </form>
-    <form id="ask-assistent-form">
-      <hr />
-      <div class="row space-between" style="gap: 40px;">
-        <div class="item size-3">
-          <p>Não achou o que precisa? Pergunte ao assistente:</p>
-          <div class="input-text width-100">
-            <input
-             type="text" 
-             alt="Pergunte ao assistente"
-            placeholder="Pergunte ao assistente"
-            id="ask-assistent-input">
-          </div>
+      </form>
+      <form id="ask-assistent-form">
+        <hr />
+        <div class="row space-between" style="gap: 40px">
+          <div class="item">
+            <p>&nbsp;</p>
+            </div>
         </div>
-        
-        <div class="item">
-          <p>&nbsp;</p>
-          <button id="ask-assistent-submit" type="button">
-            Enviar
-          </button>
-        </div>
-      </div>
-    </form>
-  </main>
-
-  <footer>
-    © Todos os direitos reservados ao STF.
-  </footer>
-  <script src="js/index.js"></script>
-</body>
+      </form>
+    </main>
+    <footer>© Todos os direitos reservados ao STF.</footer>
+    <script src="js/index.js"></script>
+  </body>
 </html>

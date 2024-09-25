@@ -13,10 +13,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ou use ["*"] para permitir todas as origens
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
-    allow_headers=["*"],  # Permite todos os cabeçalhos
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization"]
 )
 
 @app.post("/generate_summary/")
@@ -24,22 +24,32 @@ async def generate_summary(file: UploadFile = File(...)):
     if not file.filename.endswith(".zip"):
         raise HTTPException(status_code=400, detail="O arquivo deve ser no formato ZIP.")
 
-    # Salvar e extrair o ZIP
+
+    # # Salvar e extrair o ZIP
     extract_folder = save_extract_zip_file(file, UPLOAD_FOLDER)
 
-    # Processar a pasta extraída com o OCR
-    process_dataset(extract_folder)
+    # # Processar a pasta extraída com o OCR
+    # process_dataset(extract_folder)
 
-    # Definir paths para as pastas de textos formatados e resumidos
-    formatted_folder = os.path.join(extract_folder, "Textos-Formatados")
+
+    # # Definir paths para as pastas de textos formatados e resumidos
+    # formatted_folder = os.path.join(extract_folder, "Textos-Formatados")
     summarized_folder = os.path.join(extract_folder, "Textos-Resumidos")
     os.makedirs(summarized_folder, exist_ok=True)
 
-    # Processar os textos formatados e gerar os resumos individuais
-    process_summary_individual(formatted_folder, summarized_folder)
+    # # Processar os textos formatados e gerar os resumos individuais
+    # process_summary_individual(formatted_folder, summarized_folder)
     
     # Processar os resumos individuais e gerar o resumo final
     final_summary_path = os.path.join(summarized_folder, "resumo_final.txt")
-    process_summary_final(summarized_folder, final_summary_path)
+    #process_summary_final(summarized_folder, final_summary_path)
     
-    return {"detail": "Upload e processamento concluídos com sucesso!"}
+    # Conteúdo do resumo final
+    with open(final_summary_path, "r", encoding="utf-8") as f:
+        final_summary_content = f.read()
+
+    # Retornar o resumo final em formato JSON
+    return {
+        "detail": "Upload e processamento concluídos com sucesso!",
+        "final_summary": final_summary_content
+    }
