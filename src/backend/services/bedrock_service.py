@@ -29,7 +29,7 @@ def get_completion(prompt, max_tokens_to_sample=4096):
     })
 
     # Define informações necessárias para a chamada ao modelo Bedrock
-    modelId = 'anthropic.claude-v2'
+    modelId = 'anthropic.claude-v2:1'
     #modelId = 'anthropic.claude-instant-v1'
     
     accept = 'application/json'
@@ -63,13 +63,11 @@ def process_obj(text_content, type_summary):
     
     # Prompt para resumo individual
     if type_summary == "individual":
-        print(f"\nUtilizando prompt para resumo individual")
-        prompt = f"\n\nHuman: Considerando as perguntas-chave abaixo: \n<perguntas_chave>{key_aspects}\n</perguntas_chave>.\n\nFaça um resumo do texto abaixo dando foco em manter as respostas para as perguntas-chave apresentadas anteriormente: \n<text>\n{text_content}</text>\nO resumo deve ser gerado em formato de texto paragrafado e apresentado direto ao ponto sem introduções.\n\nAssistant:"
+        prompt = f"\n\nHuman: Considerando as perguntas-chave abaixo:\n\n<perguntas_chave>\n{key_aspects}\n</perguntas_chave>\n\nFaça um resumo paragrafado do texto abaixo dando foco em conter as respostas das perguntas-chave apresentadas anteriormente:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
 
     # Prompt para resumo final
     elif type_summary == "final":
-        print(f"\nUtilizando prompt para resumo final")
-        prompt = f"\n\nHuman: Considerando as perguntas-chave abaixo: \n<perguntas_chave>{key_aspects}\n</perguntas_chave>.\n\n O texto abaixo é um conjunto concatenado de outros resumos, elabore um resumo final dando enfoque em manter as informações que respondem às perguntas-chave mencionadas anteriormente para garantir a inclusão destes pontos relevantes: \n<text>\n{text_content}</text>\nO resumo deve ser gerado em formato de texto paragrafado e apresentado direto ao ponto sem introduções.\n\nAssistant:"
+        prompt = f"\n\nHuman: Dado o texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nOrganize todas esses resumos avulsos em um texto só no formato paragrafado, mantendo todas as informações. DO NOT PREAMBLE.\n\nAssistant:"
         
     # print(f"\nprompt: {prompt}")
 

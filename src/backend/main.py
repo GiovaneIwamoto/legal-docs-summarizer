@@ -24,13 +24,11 @@ async def generate_summary(file: UploadFile = File(...)):
     if not file.filename.endswith(".zip"):
         raise HTTPException(status_code=400, detail="O arquivo deve ser no formato ZIP.")
 
-
     # Salvar e extrair o ZIP
     extract_folder = save_extract_zip_file(file, UPLOAD_FOLDER)
 
     # Processar a pasta extraída com o OCR
     process_dataset(extract_folder)
-
 
     # Definir paths para as pastas de textos formatados e resumidos
     formatted_folder = os.path.join(extract_folder, "Textos-Formatados")
