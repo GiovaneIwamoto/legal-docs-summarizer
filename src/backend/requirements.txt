@@ -3,3 +3,7 @@ uvicorn
 boto3
 python-dotenv
 awscli
+zipfile
+shutil
+re
+fitz

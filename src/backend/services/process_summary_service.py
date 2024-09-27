@@ -57,7 +57,7 @@ def process_summary_final(input_folder, output_file):
                     
     # Chamar o service de Bedrock para gerar o resumo final
     try:              
-        print(f"\nContexto Final: \n\n{text_content}")      
+        #print(f"\nContexto Final: \n\n{text_content}")      
         summary = process_obj(text_content, type_summary="final")
                     
         output_file_path = os.path.join(output_file)    

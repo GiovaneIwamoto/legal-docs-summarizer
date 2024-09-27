@@ -22,16 +22,15 @@ def get_completion(prompt, max_tokens_to_sample=4096):
     body = json.dumps({
         "prompt": prompt,
         "max_tokens_to_sample": max_tokens_to_sample,
-        "temperature": 0,
-        "top_k": 1,
-        "top_p": 0.001,
+        "temperature": 0, # Determinístico
+        "top_k": 1, # Token mais provável
+        "top_p": 0.001, # Probabilidade acumulada 
         "stop_sequences": ["\nHuman:"],
     })
 
     # Define informações necessárias para a chamada ao modelo Bedrock
     modelId = 'anthropic.claude-v2:1'
-    #modelId = 'anthropic.claude-instant-v1'
-    
+        
     accept = 'application/json'
     contentType = 'application/json'
 
@@ -63,13 +62,11 @@ def process_obj(text_content, type_summary):
     
     # Prompt para resumo individual
     if type_summary == "individual":
-        #prompt = f"\n\nHuman: Considerando as perguntas-chave abaixo:\n\n<perguntas_chave>\n{key_aspects}\n</perguntas_chave>\n\nFaça um resumo paragrafado do texto abaixo dando foco em conter as respostas das perguntas-chave apresentadas anteriormente:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
-        prompt = f"\n\nHuman: Faça um resumo considerando os seguintes detalhes que devem ser incluídos e respondidos indiretamente:\n\n<detalhes>\n{key_aspects}\n</detalhes>\n\nFaça um resumo textual com foco em conter as informações conforme pedido na menção dos detalhes, mas não se limite somente a isso. Segue abaixo o texto:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
+        prompt = f"\n\nHuman: Produza um resumo textual guiado em extrair as informações para os seguintes conceitos-chave:\n\n{key_aspects}\n\nApresente o resumo em formato de texto em parágrafos e contínuo já que trata de um documento jurídico. Segue abaixo o texto:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
 
     # Prompt para resumo final
     elif type_summary == "final":
-        #prompt = f"\n\nHuman: Dado o texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nOrganize todas esses resumos avulsos em um texto só no formato paragrafado, mantendo todas as informações. DO NOT PREAMBLE.\n\nAssistant:"
-        prompt = f"\n\nHuman: Com base no texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nReestruture todos esses resumos avulsos em um texto só no formato paragrafado, preservando todas as informações. DO NOT PREAMBLE.\n\nAssistant:"
+        prompt = f"\n\nHuman: Com base no texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nReestruture todos esses resumos avulsos em um texto só no formato paragrafado, preservando todas as informações. DO NOT PREAMBLE. Mostre na saída somente o texto, sem introduções vindas da sua parte.\n\nAssistant:"
 
     # print(f"\nprompt: {prompt}")
 
@@ -101,3 +98,32 @@ try:
 # Lida com exceções e exibe uma mensagem de erro em caso de falha
 except Exception as e:
     print(f"Erro: {e}")
+    
+ 
+# PROMPT TEXTO INDIVIDUAL   
+#
+# \n\nHuman: Produza um resumo textual guiado em extrair as informações para os seguintes conceitos-chave:
+# 
+# \n\n{key_aspects}\n\n
+# 
+# Apresente o resumo em formato de texto em parágrafos e contínuo já que trata de um documento jurídico. Segue abaixo o texto:
+# 
+# n\n<text>
+# \n{text_content}
+# \n</text>
+# 
+# \n\nDO NOT PREAMBLE.
+# 
+# \n\nAssistant:"
+
+
+# PROMPT TEXTO FINAL
+# \n\nHuman: Com base no texto abaixo que é um conjunto de resumos concatenados:
+# 
+# \n\n<texto>
+# \n{text_content}
+# \n</texto>
+# 
+# \n\nReestruture todos esses resumos avulsos em um texto só no formato paragrafado, preservando todas as informações. 
+# DO NOT PREAMBLE. Mostre na saída somente o texto, sem introduções vindas da sua parte.
+# \n\nAssistant:"
