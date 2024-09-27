@@ -63,12 +63,14 @@ def process_obj(text_content, type_summary):
     
     # Prompt para resumo individual
     if type_summary == "individual":
-        prompt = f"\n\nHuman: Considerando as perguntas-chave abaixo:\n\n<perguntas_chave>\n{key_aspects}\n</perguntas_chave>\n\nFaça um resumo paragrafado do texto abaixo dando foco em conter as respostas das perguntas-chave apresentadas anteriormente:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
+        #prompt = f"\n\nHuman: Considerando as perguntas-chave abaixo:\n\n<perguntas_chave>\n{key_aspects}\n</perguntas_chave>\n\nFaça um resumo paragrafado do texto abaixo dando foco em conter as respostas das perguntas-chave apresentadas anteriormente:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
+        prompt = f"\n\nHuman: Faça um resumo considerando os seguintes detalhes que devem ser incluídos e respondidos indiretamente:\n\n<detalhes>\n{key_aspects}\n</detalhes>\n\nFaça um resumo textual com foco em conter as informações conforme pedido na menção dos detalhes, mas não se limite somente a isso. Segue abaixo o texto:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
 
     # Prompt para resumo final
     elif type_summary == "final":
-        prompt = f"\n\nHuman: Dado o texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nOrganize todas esses resumos avulsos em um texto só no formato paragrafado, mantendo todas as informações. DO NOT PREAMBLE.\n\nAssistant:"
-        
+        #prompt = f"\n\nHuman: Dado o texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nOrganize todas esses resumos avulsos em um texto só no formato paragrafado, mantendo todas as informações. DO NOT PREAMBLE.\n\nAssistant:"
+        prompt = f"\n\nHuman: Com base no texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nReestruture todos esses resumos avulsos em um texto só no formato paragrafado, preservando todas as informações. DO NOT PREAMBLE.\n\nAssistant:"
+
     # print(f"\nprompt: {prompt}")
 
     response = get_completion(prompt, 4096)
