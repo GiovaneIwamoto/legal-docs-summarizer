@@ -6,26 +6,32 @@ This project utilizes AWS Bedrock and OCR technology to extract text from PDFs, 
 
 ## [![My Skills](https://skillicons.dev/icons?i=aws,py,fastapi,js,html,css&theme=dark)](https://skillicons.dev)
 
+---
+
 ### **BACKEND ENDPOINT**
 
 | Method | Endpoint                                | Description       |
 | ------ | --------------------------------------- | ----------------- |
 | POST   | https://localhost:8000/generate_summary | Generate Summmary |
 
-> AWS Bedrock models ID:
-> https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html
+---
 
-> AWS Bedrock prompt for summarization:
-> https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-templates-and-examples.html#summarization
+### **USEFUL LINKS**
 
-> Anthropic models comparison:
-> https://docs.anthropic.com/en/docs/about-claude/models
+AWS Bedrock models ID:
+https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html
 
-> Anthropic chunck summ improve performance:
-> https://docs.anthropic.com/en/docs/about-claude/use-case-guides/legal-summarization#improve-performance
+AWS Bedrock prompt for summarization:
+https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-templates-and-examples.html#summarization
 
-> Anthropic summarization prompt engineering guide:
-> https://github.com/anthropics/anthropic-cookbook/blob/main/skills/summarization/guide.ipynb
+Anthropic models comparison:
+https://docs.anthropic.com/en/docs/about-claude/models
+
+Anthropic chunck summ improve performance:
+https://docs.anthropic.com/en/docs/about-claude/use-case-guides/legal-summarization#improve-performance
+
+Anthropic summarization prompt engineering guide:
+https://github.com/anthropics/anthropic-cookbook/blob/main/skills/summarization/guide.ipynb
 
 ---
 
