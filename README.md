@@ -12,34 +12,21 @@ This project utilizes AWS Bedrock and OCR technology to extract text from PDFs, 
 | ------ | --------------------------------------- | ----------------- |
 | POST   | https://localhost:8000/generate_summary | Generate Summmary |
 
-### **INSTALLATION GUIDE**
-
-```ruby
-$ cd .\src\backend\
-$ fastapi run
-```
-
 > [!NOTE]
-
 > AWS Bedrock models ID
-
-https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html
-
+> https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html
+>
 > AWS Bedrock prompt for summarization
-
-https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-templates-and-examples.html#summarization
-
+> https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-templates-and-examples.html#summarization
+>
 > Anthropic models comparison
-
-https://docs.anthropic.com/en/docs/about-claude/models
-
+> https://docs.anthropic.com/en/docs/about-claude/models
+>
 > Anthropic chunck summ improve performance
-
-https://docs.anthropic.com/en/docs/about-claude/use-case-guides/legal-summarization#improve-performance
-
+> https://docs.anthropic.com/en/docs/about-claude/use-case-guides/legal-summarization#improve-performance
+>
 > Anthropic summarization prompt engineering guide
-
-https://github.com/anthropics/anthropic-cookbook/blob/main/skills/summarization/guide.ipynb
+> https://github.com/anthropics/anthropic-cookbook/blob/main/skills/summarization/guide.ipynb
 
 ---
 
