@@ -1,7 +1,6 @@
 import fitz
 import os
 import shutil
-
 from services.format_text_service import format_extracted_text
 
 def extract_text_from_pdf(pdf_path):
@@ -14,76 +13,71 @@ def extract_text_from_pdf(pdf_path):
         doc.close()
         return text
     except fitz.fitz.EmptyFileError:
-        print(f"Erro: O arquivo {pdf_path} está vazio ou corrompido.")
+        print(f"Error: File {pdf_path} is empty or corrupted.")
         return ""
 
 def process_folder(folder_path, output_folder, log_file):
-    # Criar a pasta de saída se não existir
+    # Create output folder if it doesn't exist
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # Listar arquivos na pasta
-    arquivos = [arquivo for arquivo in os.listdir(
-        folder_path) if arquivo.endswith(".pdf")]
+    # List files in folder
+    files = [file for file in os.listdir(folder_path) if file.endswith(".pdf")]
 
-    # Processar cada arquivo na pasta
-    for arquivo in arquivos:
-        pdf_path = os.path.join(folder_path, arquivo)
-        texto_extraido = extract_text_from_pdf(pdf_path)
+    # Process each file in the folder
+    for file in files:
+        pdf_path = os.path.join(folder_path, file)
+        extracted_text = extract_text_from_pdf(pdf_path)
 
-        # Verificar se o texto foi extraído com sucesso antes de criar o arquivo de saída
-        if texto_extraido:
-            # Gerar o nome do arquivo de saída (trocar extensão para .txt)
-            nome_arquivo_saida = os.path.splitext(arquivo)[0] + ".txt"
-            caminho_saida = os.path.join(output_folder, nome_arquivo_saida)
+        # Check if text was successfully extracted before creating output file
+        if extracted_text:
+            # Generate output filename (change extension to .txt)
+            output_filename = os.path.splitext(file)[0] + ".txt"
+            output_path = os.path.join(output_folder, output_filename)
 
-            # Escrever o texto extraído em um arquivo de texto
-            with open(caminho_saida, "w", encoding="utf-8") as arquivo_saida:
-                arquivo_saida.write(texto_extraido)
-
-            print(f"\nTexto extraído do {pdf_path} e salvo em {caminho_saida}")
+            # Write extracted text to a text file
+            with open(output_path, "w", encoding="utf-8") as output_file:
+                output_file.write(extracted_text)
+            print(f"\nText extracted from {pdf_path} and saved to {output_path}")
         else:
-            # Adicionar ao arquivo de log
-            log_file.write(
-                f"Erro: Não foi possível extrair texto de {pdf_path}\n")
-
+            # Add to log file
+            log_file.write(f"Error: Could not extract text from {pdf_path}\n")
 
 def process_dataset(dataset_path):
-    # Verificar se a pasta existe
+    # Check if folder exists
     if not os.path.exists(dataset_path):
-        print(f"A pasta {dataset_path} não existe.")
+        print(f"Folder {dataset_path} does not exist.")
         return
 
-    # Nome do arquivo de log
-    log_file_path = os.path.join(dataset_path, "corrompidos.txt")
+    # Log file name
+    log_file_path = os.path.join(dataset_path, "corrupted.txt")
 
-    # Criar a pasta de saída para os arquivos de texto extraídos
-    extracted_output_folder_path = os.path.join(dataset_path, "Textos-Extraidos")
+    # Create output folder for extracted text files
+    extracted_output_folder_path = os.path.join(dataset_path, "Extracted-Texts")
     if not os.path.exists(extracted_output_folder_path):
         os.makedirs(extracted_output_folder_path)
 
-    # Criar a pasta de saída para os arquivos de texto formatados
-    formatted_output_folder_path = os.path.join(dataset_path, "Textos-Formatados")
+    # Create output folder for formatted text files
+    formatted_output_folder_path = os.path.join(dataset_path, "Formatted-Texts")
     if not os.path.exists(formatted_output_folder_path):
         os.makedirs(formatted_output_folder_path)
 
-    # Abrir o arquivo de log para escrever
+    # Open log file for writing
     with open(log_file_path, "w", encoding="utf-8") as log_file:
-        # Listar todas as pastas dentro de "dataset"
-        subpastas = [subpasta for subpasta in os.listdir(dataset_path)
-             if os.path.isdir(os.path.join(dataset_path, subpasta)) 
-             and subpasta not in ["Textos-Extraidos", "Textos-Formatados","Textos-Resumidos"]]
+        # List all folders inside "dataset"
+        subfolders = [subfolder for subfolder in os.listdir(dataset_path)
+                     if os.path.isdir(os.path.join(dataset_path, subfolder))
+                     and subfolder not in ["Extracted-Texts", "Formatted-Texts", "Summarized-Texts"]]
 
+        # Process each subfolder
+        for subfolder in subfolders:  # Modify here depending on number of subfolders
+            subfolder_path = os.path.join(dataset_path, subfolder)
+            extracted_subfolder_output_path = os.path.join(extracted_output_folder_path, subfolder)
+            formatted_subfolder_output_path = os.path.join(formatted_output_folder_path, subfolder)
 
-        # Processar cada subpasta
-        for subpasta in subpastas: # Alterar aqui dependendo da quantidade de subpastas
-            subpasta_path = os.path.join(dataset_path, subpasta)
-            extracted_subpasta_output_path = os.path.join(extracted_output_folder_path, subpasta)
-            formatted_subpasta_output_path = os.path.join(formatted_output_folder_path, subpasta)
-            
-            # Extrair texto e formatar para cada subpasta
-            process_folder(subpasta_path, extracted_subpasta_output_path, log_file)
-            format_extracted_text(extracted_subpasta_output_path, formatted_subpasta_output_path)
-            
-            # Remover a subpasta após o processamento
-            shutil.rmtree(subpasta_path) 
+            # Extract text and format for each subfolder
+            process_folder(subfolder_path, extracted_subfolder_output_path, log_file)
+            format_extracted_text(extracted_subfolder_output_path, formatted_subfolder_output_path)
+
+            # Remove subfolder after processing
+            shutil.rmtree(subfolder_path)

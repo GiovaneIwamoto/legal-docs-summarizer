@@ -21,45 +21,54 @@ app.add_middleware(
 
 @app.post("/generate_summary/")
 async def generate_summary(file: UploadFile = File(...)):
-    if not file.filename.endswith(".zip"):
-        raise HTTPException(status_code=400, detail="O arquivo deve ser no formato ZIP.")
+    """
+    Endpoint to generate a summary from a ZIP file containing documents.
 
-    # Salvar e extrair o ZIP
+    Args:
+        file (UploadFile): The uploaded ZIP file containing documents.
+
+    Returns:
+        dict: A dictionary containing the detail message and the final summary content.
+    """
+    if not file.filename.endswith(".zip"):
+        raise HTTPException(status_code=400, detail="The file must be in ZIP format.")
+
+    # Save and extract the ZIP file
     extract_folder = save_extract_zip_file(file, UPLOAD_FOLDER)
 
-    # Processar a pasta extraída com o OCR
+    # Process the extracted folder with OCR
     process_dataset(extract_folder)
 
-    # Definir paths para as pastas de textos formatados e resumidos
-    formatted_folder = os.path.join(extract_folder, "Textos-Formatados")
-    summarized_folder = os.path.join(extract_folder, "Textos-Resumidos")
+    # Define paths for formatted and summarized text folders
+    formatted_folder = os.path.join(extract_folder, "Formatted-Texts")
+    summarized_folder = os.path.join(extract_folder, "Summarized-Texts")
     os.makedirs(summarized_folder, exist_ok=True)
 
-    final_summary_path = os.path.join(summarized_folder, "resumo_final.txt")
+    final_summary_path = os.path.join(summarized_folder, "final_summary.txt")
   
-    # Verificar se o resumo final já existe
+    # Check if the final summary already exists
     if os.path.exists(final_summary_path):
-        # Ler o conteúdo do resumo final existente
+        # Read the content of the existing final summary
         with open(final_summary_path, "r", encoding="utf-8") as f:
             final_summary_content = f.read()
 
         return {
-            "detail": "Resumo final resgatado.",
+            "detail": "Final summary retrieved.",
             "final_summary": final_summary_content
         }
 
-    # Processar os textos formatados e gerar os resumos individuais
+    # Process the formatted texts and generate individual summaries
     process_summary_individual(formatted_folder, summarized_folder)
     
-    # Processar os resumos individuais e gerar o resumo final
+    # Process the individual summaries and generate the final summary
     process_summary_final(summarized_folder, final_summary_path)
     
-    # Conteúdo do resumo final
+    # Read the content of the final summary
     with open(final_summary_path, "r", encoding="utf-8") as f:
         final_summary_content = f.read()
 
-    # Retornar o resumo final em formato JSON
+    # Return the final summary in JSON format
     return {
-        "detail": "Resumo final gerado com sucesso.",
+        "detail": "Final summary generated successfully.",
         "final_summary": final_summary_content
     }

@@ -1,13 +1,13 @@
-# Importação das bibliotecas
+# Import libraries
 import boto3
 import json
 import os
 from dotenv import load_dotenv
 
-# Carregue as variáveis de ambiente do arquivo .env
+# Load environment variables from .env file
 load_dotenv()
 
-# Configura o cliente Bedrock com as credenciais carregadas
+# Configure Bedrock client with loaded credentials
 bedrock = boto3.client(
     'bedrock',
     'us-east-1',
@@ -17,96 +17,84 @@ bedrock = boto3.client(
     aws_session_token=os.getenv("AWS_SESSION_TOKEN")
 )
 
-# Cria um corpo de requisição em formato JSON com parâmetros para a solicitação Bedrock
+# Create a JSON request body with parameters for the Bedrock request
 def get_completion(prompt, max_tokens_to_sample=4096):
     body = json.dumps({
         "prompt": prompt,
         "max_tokens_to_sample": max_tokens_to_sample,
-        "temperature": 0, # Determinístico
-        "top_k": 1, # Token mais provável
-        "top_p": 0.001, # Probabilidade acumulada 
+        "temperature": 0, # Deterministic
+        "top_k": 1, # Most likely token
+        "top_p": 0.001, # Cumulative probability
         "stop_sequences": ["\nHuman:"],
     })
 
-    # Define informações necessárias para a chamada ao modelo Bedrock
-    modelId = 'anthropic.claude-v2:1'
-        
+    # Define required information for Bedrock model call
+    model_id = 'anthropic.claude-v2:1'
     accept = 'application/json'
-    contentType = 'application/json'
+    content_type = 'application/json'
 
-    # Chama o modelo Bedrock com o corpo da requisição
+    # Call Bedrock model with request body
     response = bedrock.invoke_model(
-        body=body, modelId=modelId, accept=accept, contentType=contentType)
+        body=body, modelId=model_id, accept=accept, contentType=content_type)
 
-    # Analisa a resposta JSON da chamada ao modelo e extrai a conclusão
+    # Parse JSON response from model call and extract completion
     response_body = json.loads(response.get('body').read())
     completion = response_body.get('completion')
     return completion
 
-# Função que processa e retorna o resumo de um texto
-def process_obj(text_content, type_summary):
+# Function that processes and returns a text summary
+def process_text(text_content, summary_type):
 
-    # Aspectos importantes que devem ser considerados no resumo
-    key_aspects = f"""
-    1. Está sendo julgado um recurso extraordinário ou agravo?
-    2. Qual órgão julgador proferiu o acórdão recorrido?
-    3. Houve reforma ou confirmação de decisão anterior?
-    4. O acórdão recorrido foi proferido por unanimidade de votos ou por maioria?
-    5. Quais são os fundamentos apresentados pelo relator?
-    6. Qual é a transcrição literal da ementa?
-    7. Qual foi o juízo de admissibilidade do recurso extraordinário (admissão ou inadmissão) e quais os seus fundamentos (matéria infraconstitucional, súmula 279, ...)?
-    8. O recurso extraordinário foi interposto com fundamento em qual dispositivo constitucional (art. 102, III, a, b, c ou d, da CF)?
-    9. Quais os dispositivos indicados como violados e quais os argumentos relevantes do recurso?
-    10. Quais os pedidos formulados no recurso?
-    11. Existem contrarrazões e quais são os argumentos relevantes do recurso?"""
+    # Important aspects to be considered in the summary
+    key_aspects = """
+    # Define the key aspects to be considered in the summary here
+    """
     
-    # Prompt para resumo individual
-    if type_summary == "individual":
-        prompt = f"\n\nHuman: Produza um resumo textual guiado em extrair as informações para os seguintes conceitos-chave:\n\n{key_aspects}\n\nApresente o resumo em formato de texto em parágrafos e contínuo já que trata de um documento jurídico. Segue abaixo o texto:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
+    # Prompt for individual summary
+    if summary_type == "individual":
+        prompt = f"\n\nHuman: Produce a textual summary guided by extracting information for the following key concepts:\n\n{key_aspects}\n\nPresent the summary in continuous paragraph format as it deals with a legal document. Here's the text:\n\n<text>\n{text_content}\n</text>\n\nDO NOT PREAMBLE.\n\nAssistant:"
 
-    # Prompt para resumo final
-    elif type_summary == "final":
-        prompt = f"\n\nHuman: Com base no texto abaixo que é um conjunto de resumos concatenados:\n\n<texto>\n{text_content}\n</texto>\n\nReestruture todos esses resumos avulsos em um texto só no formato paragrafado, preservando todas as informações. DO NOT PREAMBLE. Mostre na saída somente o texto, sem introduções vindas da sua parte.\n\nAssistant:"
-
-    # print(f"\nprompt: {prompt}")
+    # Prompt for final summary
+    elif summary_type == "final":
+        prompt = f"\n\nHuman: Based on the text below which is a set of concatenated summaries:\n\n<text>\n{text_content}\n</text>\n\nRestructure all these individual summaries into a single paragraphed text, preserving all information. DO NOT PREAMBLE. Show only the text in the output, without introductions from your part.\n\nAssistant:"
 
     response = get_completion(prompt, 4096)
     return response 
 
-# Função que processa o arquivo de entrada e escreve o resultado no arquivo de saída
+# Function that processes the input file and writes the result to the output file
 def process_and_write_output(input_file, output_file):
     with open(input_file, "r", encoding="utf-8") as file:
         data = json.load(file) 
     output_data = [] 
 
-    # Chama a função process_obj para processar cada objeto, converte em JSON e adiciona ao objeto de saida.
-    for obj in data:
-        result_str = process_obj(obj)  
+    # Call process_text function to process each object, convert to JSON and add to output object
+    for item in data:
+        result_str = process_text(item)  
         result_json = json.loads(result_str)  
         output_data.append(result_json) 
 
-    # Escreve os dados de saída no arquivo de saída, formatando com indentação
+    # Write output data to output file, formatting with indentation
     with open(output_file, "w", encoding="utf-8") as file:
         json.dump(output_data, file, ensure_ascii=False, indent=4)
 
-# Defina o nome do arquivo de entrada e saida
+# Define input and output filenames
 try:
-    input_file = "entrada.json"
-    output_file = "saida.json"
+    input_file = "input.json"
+    output_file = "output.json"
     process_and_write_output(input_file, output_file)
 
-# Lida com exceções e exibe uma mensagem de erro em caso de falha
+# Handle exceptions and display error message in case of failure
 except Exception as e:
-    print(f"Erro: {e}")
+    print(f"Error: {e}")
     
  
-# PROMPT TEXTO INDIVIDUAL   
+# INDIVIDUAL TEXT PROMPT   
 #
-# \n\nHuman: Produza um resumo textual guiado em extrair as informações para os seguintes conceitos-chave:
+# \n\nHuman: Produce a textual summary guided by extracting information for the following key concepts:
 # 
 # \n\n{key_aspects}\n\n
 # 
-# Apresente o resumo em formato de texto em parágrafos e contínuo já que trata de um documento jurídico. Segue abaixo o texto:
+# Present the summary in continuous paragraph format as it deals with a legal document. Here's the text:
 # 
 # n\n<text>
 # \n{text_content}
@@ -117,13 +105,13 @@ except Exception as e:
 # \n\nAssistant:"
 
 
-# PROMPT TEXTO FINAL
-# \n\nHuman: Com base no texto abaixo que é um conjunto de resumos concatenados:
+# FINAL TEXT PROMPT
+# \n\nHuman: Based on the text below which is a set of concatenated summaries:
 # 
-# \n\n<texto>
+# \n\n<text>
 # \n{text_content}
-# \n</texto>
+# \n</text>
 # 
-# \n\nReestruture todos esses resumos avulsos em um texto só no formato paragrafado, preservando todas as informações. 
-# DO NOT PREAMBLE. Mostre na saída somente o texto, sem introduções vindas da sua parte.
+# \n\nRestructure all these individual summaries into a single paragraphed text, preserving all information. 
+# DO NOT PREAMBLE. Show only the text in the output, without introductions from your part.
 # \n\nAssistant:"
