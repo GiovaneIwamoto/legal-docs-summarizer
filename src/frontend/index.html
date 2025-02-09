@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xml:lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"></html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>STF</title>
+    <title>Summarizer</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,51 +16,45 @@
   </head>
   <body>
     <header>
-      <div class="brand">
-        <img src="assets/img/logo.svg" alt="Logo do STF" />
-      </div>
-      <h1>Resumos de processos STF</h1>
+      <h1>Process Summaries</h1>
     </header>
     <div class="tutorial-wrapper">
       <div id="tutorial">
         <img  
           src="assets/img/tutorial.svg"
-          alt="Imagem de um ponto de interrogação"
+          alt="Image of a question mark"
         />
-        <span>Saiba como usar</span>
+        <span>Learn how to use</span>
         <div id="tutorial-tooltip">
-          <b> Selecionar documentos:</b>
+          <b>Select documents:</b>
           <ol>
             <li>
-              Você pode selecionar uma pasta do seu computador através do botão de anexar arquivo. Essa opção permite que você escolha uma pasta no formato .zip
-              para realizar a extração das informações;
+              You can select a folder from your computer through the attach file button. This option allows you to choose a folder in .zip format to extract the information;
             </li>
             <li>
-              Após a escolha do da pasta .zip que deseja abrir, é preciso clicar
-              no botão “Extrair informações”;
+              After choosing the .zip folder you want to open, you need to click the "Extract information" button;
             </li>
             <li>
-              As informações relativas à pasta selecionada aparecerão
-              sumarizadas abaixo dos campos de seleção e anexo;
+              The information related to the selected folder will appear summarized below the selection and attachment fields;
             </li>
           </ol>
             <br />
-            <b>Estrutura de diretório da pasta a ser enviada:</b>
+            <b>Directory structure of the folder to be sent:</b>
           <ol>
             <li>
-              A ferramenta analisa arquivos PDFs que estão dentro de subpastas da pasta principal;
+              The tool analyzes PDF files that are inside subfolders of the main folder;
             </li>
             <li>
-                Portanto a estrutura de diretório deve ser:
+                Therefore, the directory structure should be:
                 <pre>
                 <code>
-                  pasta-principal.zip/
-                  |── subpasta1/
-                  │    |── arquivo1.pdf
-                  │    |── arquivo2.pdf
-                  |── subpasta2/
-                  │    |── arquivo3.pdf
-                  │    |── arquivo4.pdf
+                  main-folder.zip/
+                   |── subfolder1/
+                  │    |── file1.pdf
+                  │    |── file2.pdf
+                   |── subfolder2/
+                  │    |── file3.pdf
+                  │    |── file4.pdf
                 </code>
                 </pre>
             </li>
@@ -69,16 +63,16 @@
       </div>
     </div>
     <main>
-      <div class="header-preform" aria-label="Cabeçalho antes do formulário">
-        <h3>Resumos de Documentos Jurídicos</h3>
+      <div class="header-preform" aria-label="Header before the form">
+        <h3>Legal Document Summaries</h3>
         <p>
-          Esta ferramenta de IA Generativa integra OCR para a extração de texto de documentos PDF e utiliza AWS Bedrock para realizar sumarização. Utiliza de Prompt Engineering para orientar a geração de resumos que abordam aspectos críticos do conteúdo jurídico.
+          This Generative AI tool integrates OCR for text extraction from PDF documents and uses AWS Bedrock to perform summarization. It uses Prompt Engineering to guide the generation of summaries that address critical aspects of legal content.
         </p>
       </div>
       <form>
         <div class="row space-between"> 
           <div class="item">
-            <p>Anexar arquivo do seu computador</p>
+            <p>Attach file from your computer</p>
             <div class="input-file">
               <p id="doc-text">Doc</p>
               <label class="label">
@@ -87,9 +81,9 @@
                   <img
                     id="icon-file-attach"
                     src="assets/img/folder.svg"
-                    alt="Imagem de uma pasta azul"
+                    alt="Image of a blue folder"
                   />
-                  <span id="label-file-attach"> Anexar arquivo ZIP </span>
+                  <span id="label-file-attach"> Attach ZIP file </span>
                 </span>
               </label>
             </div>
@@ -99,23 +93,23 @@
         <div class="row">
           <div class="item-align-left">
             <p>&nbsp;</p>
-            <button id="extract" type="button">Extrair informações</button>
+            <button id="extract" type="button">Extract information</button>
           </div>
         </div>
         <div class="row">
           <div id="chat-loader">
-            <img src="assets/img/logo-loader.svg" alt="Logo do STF" />
-            Extraindo dados...
+            <img src="assets/img/logo-loader.svg" alt="STF Logo" />
+            Extracting data...
           </div>
           <div id="chat-wrapper">
             <h3></h3>
             <div id="chat">
               <div class="message-box">
                 <div id="sender">
-                  <span id="identifier">Resumo do documento</span>
+                  <span id="identifier">Document summary</span>
                 </div>
                 <div class="message" id="message-txt">
-                  Mensagem onde será exibido o resumo do documento
+                  Message where the document summary will be displayed
                 </div>
               </div>
             </div>
@@ -131,7 +125,7 @@
         </div>
       </form>
     </main>
-    <footer>© Todos os direitos reservados ao STF.</footer>
+    <footer></footer>
     <script src="js/index.js"></script>
   </body>
 </html>
