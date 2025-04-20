@@ -86,32 +86,3 @@ try:
 # Handle exceptions and display error message in case of failure
 except Exception as e:
     print(f"Error: {e}")
-    
- 
-# INDIVIDUAL TEXT PROMPT   
-#
-# \n\nHuman: Produce a textual summary guided by extracting information for the following key concepts:
-# 
-# \n\n{key_aspects}\n\n
-# 
-# Present the summary in continuous paragraph format as it deals with a legal document. Here's the text:
-# 
-# n\n<text>
-# \n{text_content}
-# \n</text>
-# 
-# \n\nDO NOT PREAMBLE.
-# 
-# \n\nAssistant:"
-
-
-# FINAL TEXT PROMPT
-# \n\nHuman: Based on the text below which is a set of concatenated summaries:
-# 
-# \n\n<text>
-# \n{text_content}
-# \n</text>
-# 
-# \n\nRestructure all these individual summaries into a single paragraphed text, preserving all information. 
-# DO NOT PREAMBLE. Show only the text in the output, without introductions from your part.
-# \n\nAssistant:"
